@@ -1,0 +1,54 @@
+ручное создание пользователя и БД (от имени root)
+
+CREATE DATABASE `hyper`;
+FLUSH PRIVILEGES;
+CREATE USER 'hyper'@'localhost' IDENTIFIED BY '12345';
+GRANT USAGE ON *.* TO 'hyper'@'localhost';
+GRANT EXECUTE, SELECT, SHOW VIEW, ALTER, ALTER ROUTINE, CREATE, CREATE ROUTINE, CREATE TEMPORARY TABLES, CREATE VIEW, DELETE, DROP, EVENT, INDEX, INSERT, REFERENCES, TRIGGER, UPDATE, LOCK TABLES  ON `hyper`.* TO 'hyper'@'localhost' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+
+автомат
+
+USE `hyper`;
+CREATE TABLE IF NOT EXISTS `codes` (
+	`userId` INT(10) UNSIGNED NOT NULL,
+	`time` TIMESTAMP NULL DEFAULT NULL,
+	`code` VARCHAR(17) NULL DEFAULT NULL,
+	INDEX `userId` (`userId`)
+)
+COLLATE='utf8_general_ci'
+ENGINE=MyISAM;
+
+CREATE TABLE IF NOT EXISTS `secure` (
+	`encode` VARCHAR(37) NOT NULL,
+	`decode` VARCHAR(100) NOT NULL,
+	INDEX `encode` (`encode`)
+)
+COLLATE='utf8_general_ci'
+ENGINE=MyISAM;
+
+CREATE TABLE IF NOT EXISTS `tokens` (
+	`userId` INT(10) UNSIGNED NOT NULL,
+	`token` VARCHAR(19) NULL DEFAULT NULL,
+	INDEX `userId` (`userId`)
+)
+COLLATE='utf8_general_ci'
+ENGINE=MyISAM;
+
+CREATE TABLE IF NOT EXISTS `users` (
+	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`login` VARCHAR(21) NOT NULL,
+	`password` VARCHAR(255) NOT NULL,
+	PRIMARY KEY (`id`)
+)
+COLLATE='utf8_general_ci'
+ENGINE=MyISAM;
+
+ALTER TABLE `tokens` ADD CONSTRAINT `FK_token_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`);
+
+ALTER TABLE `codes` ADD CONSTRAINT `FK_code_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`);
+
+INSERT INTO `users` (`id`, `login`, `password`) VALUES (1, 'hyper01', '$2y$10$dZ8ydpjH1/yyGDh/DHeU7uhmMANy5kRnfgjftrzWGMpEzFtPaunRK');
+вставленная записаь имеет следующие параметры:
+login=hyper01
+password=123456789

@@ -1,0 +1,34 @@
+RewriteEngine on
+RewriteBase /
+
+# sign
+RewriteCond %{REQUEST_URI} ^/sign [NC]
+RewriteRule ^sign(.*)$ /$1 [L,QSA]
+
+# auth
+RewriteCond %{REQUEST_URI} ^/auth [NC]
+RewriteRule ^auth(.*)$ /$1 [L,QSA]
+
+# get
+RewriteCond %{REQUEST_URI} ^/get [NC]
+RewriteRule ^get(.*)$ /$1 [L,QSA]
+
+# list
+RewriteCond %{REQUEST_URI} ^/list [NC]
+RewriteRule ^list(.*)$ /$1 [L,QSA]
+
+# image link
+RewriteCond %{REQUEST_URI} ^/\..{37}$
+RewriteCond %{REQUEST_URI} !^/sign [NC]
+RewriteCond %{REQUEST_URI} !^/auth [NC]
+RewriteCond %{REQUEST_URI} !^/get [NC]
+RewriteCond %{REQUEST_URI} !^/list [NC]
+RewriteRule ^(.*)$ /?$1 [L]
+
+# cancel direct link
+RewriteRule (png|jpg|jpeg|gif|bmp|tif)$  - [F]
+
+ErrorDocument 400 /error.php
+ErrorDocument 401 /error.php
+ErrorDocument 403 /error.php
+ErrorDocument 404 /error.php
