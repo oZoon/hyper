@@ -201,7 +201,7 @@ function getImageMeta()
     global $state;
     $exif = getExif();
     $state['response']['id'] = $state['qs']['id'];
-    $state['response']['fileName'] = $state['imageList'][$i];
+    $state['response']['fileName'] = $exif['FILE']['FileName'];
     $state['response']['fileDateTime'] = $exif['FILE']['FileDateTime'];
     $state['response']['fileSize'] = $exif['FILE']['FileSize'];
     $state['response']['width'] = $exif['COMPUTED']['Width'];
